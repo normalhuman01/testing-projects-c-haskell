@@ -2,6 +2,7 @@
 #include <math.h>
 #define MAX_REQ_SIZE 500000
 
+
 typedef struct {
     uint32_t requester;
     char *hash;
