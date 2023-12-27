@@ -1,5 +1,7 @@
 #include "lsp_server.h"
 #include <math.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define MAX_REQ_SIZE 500000
 
