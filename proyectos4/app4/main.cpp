@@ -1,20 +1,30 @@
-#include "analizador_lexico.h"
-#include "analizador_sintactico.h"
 #include <iostream>
+#include <vector>
+#include "lexer.h"
+#include "parser.h"
 
 int main() {
-    AnalizadorLexico lexico;
-    AnalizadorSintactico sintactico;
+    std::string expression;
+    std::cout << "Ingrese una expresión postfija (separando números y operadores con espacios): ";
+    std::getline(std::cin, expression);
 
-    std::string expresion = "2 3 + 4 *"; // Cambia la expresión a analizar aquí
+    Lexer lexer;
+    std::vector<Token> tokens = lexer.tokenize(expression);
 
-    std::vector<std::pair<std::string, std::string>> tokens = lexico.AnalizarExpresion(expresion);
-    
-    std::tuple<std::string, int, int> resultado = sintactico.ParseExpresion(tokens);
-
-    if (std::get<0>(resultado) == "NUMERO") {
-        std::cout << "Resultado: " << std::get<1>(resultado) << std::endl;
+    if (lexer.hasError()) {
+        std::cout << "Error léxico: Caracter no reconocido." << std::endl;
+        return 1;
     }
+
+    Parser parser;
+    Node* root = parser.parse(tokens);
+
+    if (parser.hasError()) {
+        std::cout << "Error sintáctico: Expresión incorrecta." << std::endl;
+        return 1;
+    }
+
+    std::cout << "Resultado de la expresión: " << evaluateExpression(root) << std::endl;
 
     return 0;
 }
